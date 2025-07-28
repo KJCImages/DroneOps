@@ -1,276 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyB6t9TPSQTSLe991THGeCE32Wej1THmPU",
-    authDomain: "kjc-ops.firebaseapp.com",
-    projectId: "kjc-ops",
-    storageBucket: "kjc-ops.appspot.com",
-    messagingSenderId: "462905833323",
-    appId: "1:462905833323:web:8f9126b88cda1493a0bef4"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-</script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#007bff" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="https://i.imgur.com/W0v3UaF.png" />
-  <title>Drone Pilot Daily Checklist</title>
+  <title>KJCI Portal Login</title>
+  <link rel="icon" href="https://i.imgur.com/uKqxfcC.png" />
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 1rem;
       background-color: #f2f2f2;
-      color: #333;
-      max-width: 600px;
-      margin: auto;
-    }
-
-    h1, h2, h3 {
       text-align: center;
-      color: #2c3e50;
+      margin-top: 100px;
     }
-
-    .section {
-      margin-bottom: 2rem;
+    input {
+      margin: 5px;
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
     }
-
-    label {
-      display: block;
-      padding: 0.5rem;
-      background: #fff;
-      border: 1px solid #ddd;
-      margin-bottom: 0.5rem;
-      border-radius: 5px;
-    }
-
-    input[type="checkbox"] {
-      margin-right: 0.5rem;
-    }
-
-    .logo {
-      display: block;
-      max-width: 100%;
-      height: auto;
-      margin: 0 auto 1rem auto;
-    }
-
-    #success-message {
-      display: none;
-      background-color: #d4edda;
-      color: #155724;
-      padding: 1rem;
-      text-align: center;
-      border: 1px solid #c3e6cb;
-      border-radius: 8px;
-      font-size: 1.2rem;
-      margin-top: 2rem;
-    }
-
-    .reset-button {
-      display: block;
-      margin: 2rem auto;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      background-color: #007bff;
-      color: white;
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: #fff;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
-
-    .reset-button:hover {
-      background-color: #0056b3;
-    }
+    button:hover { background: #0056b3; }
+    .logo { max-width: 150px; margin-bottom: 20px; }
+    .error { color: red; margin-top: 10px; font-size: 0.9em; }
+    .logout-btn { margin-top: 20px; background: #dc3545; }
+    .logout-btn:hover { background: #a71d2a; }
   </style>
 </head>
 <body>
-  <img src="https://i.imgur.com/W0v3UaF.png" alt="KJC Images Logo" class="logo">
-  <h1>Drone Pilot Daily Checklist</h1>
-
-  <div class="section">
-    <h2>Night Before</h2>
-    <label><input type="checkbox" data-id="night1" />Check for firmware updates</label>
-    <label><input type="checkbox" data-id="night2" />Charge drone batteries and controller</label>
-    <label><input type="checkbox" data-id="night3" />Format SD cards</label>
-    <label><input type="checkbox" data-id="night4" />Confirm weather and airspace</label>
-    <label><input type="checkbox" data-id="night5" />Pre-file LAANC if needed</label>
+  <div id="loginDiv">
+    <img src="https://i.imgur.com/W0v3UaF.png" alt="KJC Images Logo" class="logo" />
+    <h2>KJC Images Portal</h2>
+    <p>Please sign in to access your workflow</p>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <br/>
+    <button id="loginButton">Login</button>
+    <div id="errorMessage" class="error"></div>
   </div>
 
-  <div class="section">
-    <h2>-= Select Job Types =-</h2>
-    <label><input type="checkbox" data-id="job-photos" onchange="toggleItems('photos')" />Photos</label>
-<label><input type="checkbox" data-id="job-videos" onchange="toggleItems('videos')" />Videos</label>
-<label><input type="checkbox" data-id="job-drone" onchange="toggleItems('drone')" />Drone</label>
-<label><input type="checkbox" data-id="job-walkthrough" onchange="toggleItems('walkthrough')" />3D Walkthrough</label>
-<label><input type="checkbox" data-id="job-luxury" onchange="toggleItems('luxury')" />Luxury with Detail</label>
-
-    <h3>-= Required Equipment =-</h3>
-    <div id="photos-items" style="display:none">
-      <label><input type="checkbox" data-id="photo1" />Camera</label>
-      <label><input type="checkbox" data-id="photo2" />Tripod</label>
-      <label><input type="checkbox" data-id="photo3" />Lenses</label>
-      <label><input type="checkbox" data-id="photo4" />Cleaning Supplies</label>
-      <label><input type="checkbox" data-id="photo5" />Batteries</label>
-      <label><input type="checkbox" data-id="photo6" />SD Cards</label>
-    </div>
-    <div id="videos-items" style="display:none">
-      <label><input type="checkbox" data-id="video1" />Camera Gimbal</label>
-      <label><input type="checkbox" data-id="video2" />Phone Gimbal</label>
-      <label><input type="checkbox" data-id="video3" />Microphones</label>
-    </div>
-    <div id="drone-items" style="display:none">
-      <label><input type="checkbox" data-id="drone1" />Drone</label>
-      <label><input type="checkbox" data-id="drone2" />Batteries</label>
-      <label><input type="checkbox" data-id="drone3" />SD Cards</label>
-      <label><input type="checkbox" data-id="drone4" />License</label>
-    </div>
-    <div id="walkthrough-items" style="display:none">
-      <label><input type="checkbox" data-id="walk1" />3D Camera</label>
-      <label><input type="checkbox" data-id="walk2" />Tripod</label>
-      <label><input type="checkbox" data-id="walk3" />Spare Batteries for 3D Camera</label>
-      <label><input type="checkbox" data-id="walk4" />Remote Powerbank</label>
-    </div>
-    <div id="luxury-items" style="display:none">
-      <label><input type="checkbox" data-id="lux1" />Prime Lenses</label>
-      <label><input type="checkbox" data-id="lux2" />CPL/Filters</label>
-      <label><input type="checkbox" data-id="lux3" />Portable LED</label>
-    </div>
+  <div id="contentDiv" style="display:none">
+    <h2>Welcome, <span id="username"></span></h2>
+    <p>You are logged in and active.</p>
+    <button id="logoutButton" class="logout-btn">Logout</button>
   </div>
 
-  <div class="section" id="pre-flight">
-    <h2>Pre-Flight</h2>
-    <label><input type="checkbox" data-id="pre1" />Survey site and identify obstacles</label>
-    <label><input type="checkbox" data-id="pre2" />Locate emergency landing spots</label>
-    <label><input type="checkbox" data-id="pre3" />Introduce yourself to homeowner/agent</label>
-    <label><input type="checkbox" data-id="pre4" />Setup landing pad and cones</label>
-    <label><input type="checkbox" data-id="pre5" />Power on and confirm signal/GPS</label>
-    <label><input type="checkbox" data-id="pre6" />Inspect drone (props, camera, battery)</label>
-  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-  <div class="section" id="in-flight">
-    <h2>In-Flight</h2>
-    <label><input type="checkbox" data-id="fly1" />Announce takeoff</label>
-    <label><input type="checkbox" data-id="fly2" />Check RTH altitude</label>
-    <label><input type="checkbox" data-id="fly3" />Capture cinematic paths and stills</label>
-    <label><input type="checkbox" data-id="fly4" />Monitor battery and safety</label>
-    <label><input type="checkbox" data-id="fly5" />Land safely</label>
-  </div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBgSTQFSPs_LE9iHTCHeG3Z3eiYHmHPu",
+      authDomain: "kjci-ops.firebaseapp.com",
+      projectId: "kjci-ops",
+      storageBucket: "kjci-ops.appspot.com",
+      messagingSenderId: "142963583332",
+      appId: "1:142963583332:web:8f91268b8cda1493a0bef4"
+    };
 
-  <div class="section" id="post-flight">
-    <h2>Post-Flight</h2>
-    <label><input type="checkbox" data-id="post1" />Inspect drone for wear/damage</label>
-    <label><input type="checkbox" data-id="post2" />Review media</label>
-    <label><input type="checkbox" data-id="post3" />Swap batteries</label>
-    <label><input type="checkbox" data-id="post4" />Use fire-safe lipo bags</label>
-    <label><input type="checkbox" data-id="post5" />Protect gear from heat/sun</label>
-  </div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-  <button class="reset-button" onclick="resetFlightChecklist()">Reset for Additional Flight?</button>
+    document.getElementById('loginButton').addEventListener('click', () => {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorDiv = document.getElementById('errorMessage');
+      errorDiv.textContent = '';
 
-  <div class="section">
-    <h2>End of Day</h2>
-    <label><input type="checkbox" data-id="end1" />Transfer and back up files</label>
-    <label><input type="checkbox" data-id="end2" />Charge all batteries</label>
-    <label><input type="checkbox" data-id="end3" />Clean and store all gear</label>
-    <label><input type="checkbox" data-id="end4" />Review tomorrow’s schedule</label>
-  </div>
-
-  <div id="success-message">✅ Congratulations, Pilot! You’ve completed the full checklist. Well-earned rest awaits. 🎉</div>
-  <button class="reset-button" onclick="confirmFullReset()">Reset Entire Checklist</button>
-
-  <audio id="success-sound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3" preload="auto"></audio>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script>
-    const checkboxes = document.querySelectorAll('input[type="checkbox"][data-id]');
-    const successMessage = document.getElementById('success-message');
-    const successSound = document.getElementById('success-sound');
-    let confettiFired = false;
-
-    function saveState() {
-  checkboxes.forEach(cb => {
-    const storageKey = `beta-${cb.dataset.id}`;
-    localStorage.setItem(storageKey, cb.checked ? '1' : '0');
-  });
-}
-
-function restoreState() {
-  checkboxes.forEach(cb => {
-    const storageKey = `beta-${cb.dataset.id}`;
-    cb.checked = localStorage.getItem(storageKey) === '1';
-  });
-}
-
-    function checkCompletion() {
-      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-      if (allChecked && !confettiFired) {
-        successMessage.style.display = 'block';
-        successSound.play();
-        window.confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        confettiFired = true;
-      } else if (!allChecked) {
-        successMessage.style.display = 'none';
-        confettiFired = false;
+      if (!email || !password) {
+        errorDiv.textContent = 'Please enter both email and password.';
+        return;
       }
-      saveState();
-    }
 
-    function resetChecklist() {
-      checkboxes.forEach(cb => {
-        cb.checked = false;
-        localStorage.removeItem(cb.dataset.id);
-      });
-      successMessage.style.display = 'none';
-      confettiFired = false;
-    }
-
-    function resetFlightChecklist() {
-      if (confirm("Are you sure you want to reset the flight-related sections?")) {
-        ['pre-flight', 'in-flight', 'post-flight'].forEach(id => {
-          document.querySelectorAll(`#${id} input[type="checkbox"]`).forEach(cb => {
-            cb.checked = false;
-            localStorage.removeItem(cb.dataset.id);
-          });
+      signInWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+          document.getElementById('loginDiv').style.display = 'none';
+          document.getElementById('contentDiv').style.display = 'block';
+          document.getElementById('username').innerText = email;
+        })
+        .catch(error => {
+          errorDiv.textContent = error.message;
         });
-        successMessage.style.display = 'none';
-        confettiFired = false;
-      }
-    }
-
-    function confirmFullReset() {
-      if (confirm("Are you sure you want to reset the entire checklist?")) {
-        resetChecklist();
-      }
-    }
-
-    function toggleItems(group) {
-      const element = document.getElementById(`${group}-items`);
-      element.style.display = element.style.display === 'none' ? 'block' : 'none';
-    }
-
-    checkboxes.forEach(cb => cb.addEventListener('change', checkCompletion));
-
-    window.addEventListener('load', () => {
-      restoreState();
-      checkCompletion();
     });
 
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(() => console.log('✅ Service Worker Registered'))
-          .catch(err => console.error('❌ Service Worker Error:', err));
+    document.getElementById('logoutButton').addEventListener('click', () => {
+      signOut(auth).then(() => {
+        document.getElementById('loginDiv').style.display = 'block';
+        document.getElementById('contentDiv').style.display = 'none';
+        document.getElementById('errorMessage').textContent = '';
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
       });
-    }
+    });
   </script>
 </body>
 </html>
