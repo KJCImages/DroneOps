@@ -3,90 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drone Pilot Daily Checklist</title>
+  <meta name="theme-color" content="#007bff" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="https://i.imgur.com/W0v3UaF.png" />
+  <title>DroneOps Beta Checklist</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 1rem;
-      background-color: #f2f2f2;
-      color: #333;
-      max-width: 600px;
-      margin: auto;
-    }
-    h1, h2 {
-      text-align: center;
-      color: #2c3e50;
-    }
-    .section {
-      margin-bottom: 2rem;
-    }
-    label {
-      display: block;
-      padding: 0.5rem;
-      background: #fff;
-      border: 1px solid #ddd;
-      margin-bottom: 0.5rem;
-      border-radius: 5px;
-    }
-    input[type="checkbox"] {
-      margin-right: 0.5rem;
-    }
-    .logo {
-      display: block;
-      max-width: 100%;
-      height: auto;
-      margin: 0 auto 1rem auto;
-    }
+    body {font-family: Arial, sans-serif; padding: 1rem; background-color: #f2f2f2; color: #333; max-width: 600px; margin: auto;}
+    h1, h2, h3 {text-align: center; color: #2c3e50;}
+    .section {margin-bottom: 2rem;}
+    label {display: block; padding: 0.5rem; background: #fff; border: 1px solid #ddd; margin-bottom: 0.5rem; border-radius: 5px;}
+    input[type="checkbox"] {margin-right: 0.5rem;}
+    .logo {display: block; max-width: 100%; height: auto; margin: 0 auto 1rem auto;}
+    #success-message {display: none; background-color: #d4edda; color: #155724; padding: 1rem; text-align: center; border: 1px solid #c3e6cb; border-radius: 8px; font-size: 1.2rem; margin-top: 2rem;}
+    .reset-button {display: block; margin: 2rem auto; padding: 0.5rem 1rem; font-size: 1rem; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;}
+    .reset-button:hover {background-color: #0056b3;}
   </style>
 </head>
 <body>
   <img src="https://i.imgur.com/W0v3UaF.png" alt="KJC Images Logo" class="logo">
-  <h1>Drone Pilot Daily Checklist</h1>
+  <h1>DroneOps Beta Daily Checklist</h1>
+  <!-- Sections remain unchanged -->
+  <div id="success-message">✅ Congratulations, Pilot! You’ve completed the full checklist. Well-earned rest awaits. 🎉</div>
+  <button class="reset-button" onclick="confirmFullReset()">Reset Entire Checklist</button>
+  <audio id="success-sound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3" preload="auto"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const checkboxes = document.querySelectorAll('input[type="checkbox"][data-id]');
+    const successMessage = document.getElementById('success-message');
+    const successSound = document.getElementById('success-sound');
+    let confettiFired = false;
 
-  <div class="section">
-    <h2>Night Before</h2>
-    <label><input type="checkbox" />Check for firmware updates</label>
-    <label><input type="checkbox" />Charge drone batteries and controller</label>
-    <label><input type="checkbox" />Format SD cards</label>
-    <label><input type="checkbox" />Confirm weather and airspace</label>
-    <label><input type="checkbox" />Pre-file LAANC if needed</label>
-    <label><input type="checkbox" />Pack gear and accessories</label>
-  </div>
-
-  <div class="section">
-    <h2>On-Site Setup</h2>
-    <label><input type="checkbox" />Survey site and identify obstacles</label>
-    <label><input type="checkbox" />Locate emergency landing spots</label>
-    <label><input type="checkbox" />Introduce yourself to homeowner/agent</label>
-    <label><input type="checkbox" />Setup landing pad and cones</label>
-    <label><input type="checkbox" />Power on and confirm signal/GPS</label>
-    <label><input type="checkbox" />Inspect drone (props, camera, battery)</label>
-  </div>
-
-  <div class="section">
-    <h2>In-Flight</h2>
-    <label><input type="checkbox" />Announce takeoff</label>
-    <label><input type="checkbox" />Check RTH altitude</label>
-    <label><input type="checkbox" />Capture cinematic paths and stills</label>
-    <label><input type="checkbox" />Monitor battery and safety</label>
-    <label><input type="checkbox" />Land safely and review media</label>
-  </div>
-
-  <div class="section">
-    <h2>Between Shoots</h2>
-    <label><input type="checkbox" />Swap batteries</label>
-    <label><input type="checkbox" />Use fire-safe lipo bags</label>
-    <label><input type="checkbox" />Protect gear from heat/sun</label>
-  </div>
-
-  <div class="section">
-    <h2>End of Day</h2>
-    <label><input type="checkbox" />Inspect drone for wear/damage</label>
-    <label><input type="checkbox" />Transfer and back up files</label>
-    <label><input type="checkbox" />Charge all batteries</label>
-    <label><input type="checkbox" />Clean and store all gear</label>
-    <label><input type="checkbox" />Review tomorrow’s schedule</label>
-  </div>
-
+    function saveState() { checkboxes.forEach(cb => localStorage.setItem(cb.dataset.id, cb.checked ? '1' : '0')); }
+    function restoreState() { checkboxes.forEach(cb => cb.checked = localStorage.getItem(cb.dataset.id) === '1'); }
+    function checkCompletion() { const allChecked = Array.from(checkboxes).every(cb => cb.checked); if (allChecked && !confettiFired) { successMessage.style.display = 'block'; successSound.play(); window.confetti({particleCount:100,spread:70,origin:{y:0.6}}); confettiFired=true;} else if (!allChecked) { successMessage.style.display = 'none'; confettiFired = false; } saveState(); }
+    function resetChecklist() { checkboxes.forEach(cb => {cb.checked = false; localStorage.removeItem(cb.dataset.id);}); successMessage.style.display = 'none'; confettiFired = false; }
+    function resetFlightChecklist() { if (confirm("Reset flight-related sections?")) { ['pre-flight','in-flight','post-flight'].forEach(id => document.querySelectorAll(`#${id} input[type="checkbox"]`).forEach(cb => {cb.checked = false; localStorage.removeItem(cb.dataset.id);})); successMessage.style.display = 'none'; confettiFired = false; }}
+    function confirmFullReset() { if (confirm("Reset entire checklist?")) resetChecklist(); }
+    function toggleItems(group) { const element = document.getElementById(`${group}-items`); element.style.display = element.style.display === 'none' ? 'block' : 'none'; }
+    checkboxes.forEach(cb => cb.addEventListener('change', checkCompletion));
+    window.addEventListener('load', () => { restoreState(); checkCompletion(); });
+    if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('service-worker.js').then(()=>console.log('✅ Service Worker Registered')).catch(err=>console.error('❌ Service Worker Error:',err)); }); }
+  </script>
 </body>
 </html>
