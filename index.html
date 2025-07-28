@@ -92,11 +92,11 @@
 
   <div class="section">
     <h2>-= Select Job Types =-</h2>
-    <label><input type="checkbox" onchange="toggleItems('photos')" />Photos</label>
-    <label><input type="checkbox" onchange="toggleItems('videos')" />Videos</label>
-    <label><input type="checkbox" onchange="toggleItems('drone')" />Drone</label>
-    <label><input type="checkbox" onchange="toggleItems('walkthrough')" />3D Walkthrough</label>
-    <label><input type="checkbox" onchange="toggleItems('luxury')" />Luxury with Detail</label>
+    <label><input type="checkbox" data-id="job-photos" onchange="toggleItems('photos')" />Photos</label>
+<label><input type="checkbox" data-id="job-videos" onchange="toggleItems('videos')" />Videos</label>
+<label><input type="checkbox" data-id="job-drone" onchange="toggleItems('drone')" />Drone</label>
+<label><input type="checkbox" data-id="job-walkthrough" onchange="toggleItems('walkthrough')" />3D Walkthrough</label>
+<label><input type="checkbox" data-id="job-luxury" onchange="toggleItems('luxury')" />Luxury with Detail</label>
 
     <h3>-= Required Equipment =-</h3>
     <div id="photos-items" style="display:none">
