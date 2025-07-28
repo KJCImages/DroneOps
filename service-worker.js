@@ -1,6 +1,6 @@
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open('checklist-cache').then(cache => {
+    caches.open('checklist-cache-beta').then(cache => {
       return cache.addAll([
         './index.html',
         './manifest.json'
