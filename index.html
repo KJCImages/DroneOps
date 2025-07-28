@@ -1,5 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB6t9TPSQTSLe991THGeCE32Wej1THmPU",
+    authDomain: "kjc-ops.firebaseapp.com",
+    projectId: "kjc-ops",
+    storageBucket: "kjc-ops.appspot.com",
+    messagingSenderId: "462905833323",
+    appId: "1:462905833323:web:8f9126b88cda1493a0bef4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+</script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
